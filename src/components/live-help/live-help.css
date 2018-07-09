@@ -13,12 +13,19 @@
 #init {
   height: 80px;
   width: 80px;
-  background-color: blue;
   cursor: pointer;
   border-radius: 10px;
   position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   right: 10px;
   bottom: 10px;
+  box-shadow: 1px 1px 10px 0px rgb(0, 0, 0, 0.2);
+}
+
+#init:hover {
+  box-shadow: 1px 1px 1000px 10px rgb(0, 0, 0, 0.4);
 }
 
 .helperheader,
@@ -37,26 +44,27 @@
   flex-flow: row wrap;
 }
 .helperheader > .heading {
-  background-color: rgb(0, 0, 0);
   padding: 2% 5%;
   border-radius: 10px;
+  font-style: italic;
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  box-shadow: 1px 1px 10px 0px rgb(0, 0, 0, 0.1);
 }
 .helperheader > .close {
   width: 40px;
   height: 40px;
   border-radius: 100%;
-  background-color: black;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 1px 1px 10px 0px rgb(0, 0, 0, 0.1);
 }
 
 .helperbody {
-  background-color: #f5f5f5;
+  background-color: #f3f3f3;
   border-radius: 10px 10px 0 0;
   padding: 10px 0 0 0;
   height: 80%;
@@ -65,8 +73,7 @@
   flex-direction: column;
 }
 
-.helperbody > .message.mine {
-  background-color: brown;
+.helperbody > .message.yours {
   width: 85%;
   margin: 10px;
   padding: 10px;
@@ -74,10 +81,10 @@
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
-  box-shadow: 1px 1px 10px 0px black;
+  box-shadow: 1px 1px 10px 0px rgb(0, 0, 0, 0.1);
 }
 
-.helperbody > .message.yours {
+.helperbody > .message.mine {
   background-color: white;
   color: black;
   width: 85%;
@@ -94,9 +101,11 @@
   margin: 0;
   word-wrap: break-word;
   font-size: 0.8em;
+  font-family: sans-serif;
+  font-style: italic;
 }
 .helperfooter {
-  background-color: #f5f5f5;
+  background-color: #f3f3f3;
   border-top: solid 1px rgb(0, 0, 0, 0.2);
   height: 10%;
   border-bottom-left-radius: 10px;
@@ -117,6 +126,7 @@
 .helperfooter > .sendbtn {
   width: 20%;
   height: 100%;
+  color: white;
   display: flex;
   justify-content: center;
 }
@@ -127,6 +137,7 @@
   margin: auto;
   border-radius: 2px;
   border: none;
+  box-shadow: 1px 1px 10px 0px rgb(0, 0, 0, 0.2);
 }
 
 .helperfooter > .sendbtn > button {
@@ -135,6 +146,7 @@
   margin: auto;
   border-radius: 50px;
   border: none;
+  box-shadow: 1px 1px 10px 0px rgb(0, 0, 0, 0.3);
 }
 @media (max-width: 1000px) {
   #helper {

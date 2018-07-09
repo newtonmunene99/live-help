@@ -27,40 +27,4 @@ declare global {
 }
 
 
-declare global {
-
-  namespace StencilComponents {
-    interface LiveHelp {
-      'last': String;
-      'organization': any;
-    }
-  }
-
-  interface HTMLLiveHelpElement extends StencilComponents.LiveHelp, HTMLStencilElement {}
-
-  var HTMLLiveHelpElement: {
-    prototype: HTMLLiveHelpElement;
-    new (): HTMLLiveHelpElement;
-  };
-  interface HTMLElementTagNameMap {
-    'live-help': HTMLLiveHelpElement;
-  }
-  interface ElementTagNameMap {
-    'live-help': HTMLLiveHelpElement;
-  }
-  namespace JSX {
-    interface IntrinsicElements {
-      'live-help': JSXElements.LiveHelpAttributes;
-    }
-  }
-  namespace JSXElements {
-    export interface LiveHelpAttributes extends HTMLAttributes {
-      'last'?: String;
-      'organization'?: any;
-    }
-  }
-}
-
-declare global { namespace JSX { interface StencilJSX {} } }
-
 export declare function defineCustomElements(window: any): void;
