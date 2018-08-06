@@ -11,17 +11,18 @@
   ],
   "scripts": {
     "build": "stencil build",
-    "dev": "sd concurrent \"stencil build --dev --watch\" \"stencil-dev-server\" ",
-    "serve": "stencil-dev-server",
-    "start": "npm run dev",
+    "start": "stencil build --dev --watch --serve",
     "test": "jest",
     "test.watch": "jest --watch"
   },
-  "dependencies": {},
+  "dependencies": {
+    "ionicons": "^4.2.4",
+    "moment": "^2.22.2",
+    "rxjs": "^6.2.2"
+  },
   "devDependencies": {
-    "@stencil/core": "^0.9.1",
-    "@stencil/dev-server": "latest",
-    "@stencil/utils": "latest",
+    "@stencil/core": "^0.11.0",
+    "@types/firebase": "^3.2.1",
     "@types/jest": "^21.1.1",
     "jest": "^21.2.1"
   },

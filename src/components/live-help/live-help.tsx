@@ -1,43 +1,82 @@
-import { Component, Prop, State } from '@stencil/core';
-
+import { Component, Prop, State, Element } from '@stencil/core';
+import FirebaseProvider from '../../services/firebase';
 @Component({
   tag: 'live-help',
   styleUrl: 'live-help.css',
   shadow: true
 })
 export class LiveHelp {
+  private firebaseService: FirebaseProvider = new FirebaseProvider();
   @Prop() organization: string = 'Live Help';
   @Prop() color: string = 'blue';
-
   @State() active: Boolean;
   @State() message: any;
   @State() preview: Boolean;
   @State() typing: Boolean;
+  @State() messages: Array<any> = [];
+  @Element() helpEl: HTMLElement;
+  helperBody: HTMLElement;
+  initialMessage: Boolean = true;
+  id: any;
+  componentDidLoad() {}
+
+  getMessages() {
+    this.firebaseService.getHelpResponseMessages(this.id).subscribe(
+      (res: any) => {
+        this.messages = res;
+        setTimeout(() => {
+          this.helperBody.scrollTo({
+            top: this.helperBody.scrollHeight,
+            behavior: 'smooth'
+          });
+        }, 1000);
+      },
+      err => {
+        console.error(err);
+      }
+    );
+  }
 
   setState(state: string) {
     if (state === 'open') {
       this.active = true;
+      setTimeout(() => {
+        this.helperBody = this.helpEl.shadowRoot.querySelector('#helperBody');
+      }, 1000);
     } else {
       this.active = false;
     }
   }
 
   addMessage(message) {
-    fetch('', {
-      method: 'POST',
-      body: JSON.stringify({
-        message: message
-      })
-    })
-      .then(res => {
-        console.log(res.json());
-      })
-      .catch(err => {
-        console.error(err);
-      });
+    if (this.initialMessage) {
+      this.id = Math.random()
+        .toString(36)
+        .substring(2);
+
+      this.getMessages();
+      this.firebaseService
+        .initiateHelpRequest(this.id, message)
+        .then(() => {
+          this.preview = false;
+          this.message = null;
+          this.initialMessage = false;
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    } else {
+      this.preview = false;
+      this.message = null;
+      this.firebaseService
+        .sendIssue(this.id, message)
+        .then(() => {})
+        .catch(err => {
+          console.error(err);
+        });
+    }
   }
 
-  componentWillLoad() {}
   render() {
     if (this.active) {
       return (
@@ -57,25 +96,23 @@ export class LiveHelp {
               X
             </div>
           </div>
-          <div class="helperbody">
-            <div
-              class="message yours"
-              style={{ 'background-color': this.color }}
-            >
-              <p>
-                Welcome Would You Like Some Help? Chat with one of our Support
-                Team Members
-              </p>
-            </div>
-            <div class="message mine">
-              <p>Yes I would Like Some help. Thank You Very Much</p>
-            </div>
-            <div
-              class="message yours"
-              style={{ 'background-color': this.color }}
-            >
-              <p>Please tell us more about your problem</p>
-            </div>
+          <div class="helperbody" id="helperBody">
+            {this.messages.map(
+              msg =>
+                msg.from == 'client' ? (
+                  <div class="message mine">
+                    <p>{msg.message}</p>
+                  </div>
+                ) : (
+                  <div
+                    class="message yours"
+                    style={{ 'background-color': this.color }}
+                  >
+                    <p>{msg.message}</p>
+                  </div>
+                )
+            )}
+
             {this.typing ? (
               <div
                 class="message yours"
@@ -106,6 +143,10 @@ export class LiveHelp {
                 value={this.message}
                 onInput={(event: any) => {
                   this.message = event.target.value;
+                  this.helperBody.scrollTo({
+                    top: this.helperBody.scrollHeight,
+                    behavior: 'smooth'
+                  });
                 }}
                 onFocus={() => {
                   this.preview = true;
@@ -115,7 +156,10 @@ export class LiveHelp {
                 }}
                 onKeyPress={event => {
                   if (event.key === 'Enter' && this.message) {
-                    this.addMessage(this.message);
+                    this.addMessage({
+                      message: this.message,
+                      from: 'client'
+                    });
                   }
                 }}
               />
@@ -124,7 +168,7 @@ export class LiveHelp {
               <button
                 disabled={!this.message}
                 onClick={() => {
-                  this.addMessage(this.message);
+                  this.addMessage({ message: this.message, from: 'client' });
                 }}
                 style={{ 'background-color': this.color }}
               >
