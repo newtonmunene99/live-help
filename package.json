@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "ionicons": "^4.2.4",
-    "moment": "^2.22.2",
+    "moment": "^2.29.2",
     "rxjs": "^6.2.2"
   },
   "devDependencies": {
